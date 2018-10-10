@@ -6,9 +6,10 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <link rel="stylesheet" href="jianli2.css">
-  <link rel="stylesheet" href="loading.css">
+  <link rel="stylesheet" href="jianli2.0.css">
+  <link rel="stylesheet" href="loading2.0.css">
   <script src="//at.alicdn.com/t/font_839477_31sbjevrokp.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
   <style type="text/css">
     .icon {
       width: 1em; height: 1em;
@@ -63,7 +64,7 @@
     </div>
 
     <main>
-      <div id="about" class="userCard">
+      <div data-x id="about" class="userCard">
         <div class="pictureAndText clearfix">
           <div class="picture">
 
@@ -121,7 +122,7 @@
       VUE开发厉害开发   超强开发
       </p>
     </main>
-    <section id="skills" class="jineng">
+    <section data-x id="skills" class="jineng">
       <h2>技能</h2>
       <ol class="clearfix">
         <li>
@@ -175,7 +176,7 @@
 
       </ol>
     </section>
-    <section id="work" class="zuopinji">
+    <section data-x id="work" class="zuopinji">
       <h2>作品集</h2>
       <nav>
         <ol class="clearfix">
@@ -189,6 +190,11 @@
       </nav>
 
       <script>
+          let specialTags = document.querySelectorAll('[data-x]')
+          for(let i = 0; i<specialTags.length; i++){
+             specialTags[i].classList.add('offset')
+          }
+
         zuopin1.onclick = function(){
         zuopinzong.className = 'bar state-1'
         }
@@ -216,13 +222,52 @@
         setTimeout(function () {
             sitewelcome.classList.remove('active')
         },1000)
+
+
+        setTimeout(function () {
+            yyy()
+        },1000)
 window.onscroll = function (e) {
     if (window.scrollY > 0) {
         topNavBar.classList.add('sticky')
     }else {
         topNavBar.classList.remove('sticky')
     }
+    yyy()
+
 }
+
+    function yyy(){
+        let specialTags = document.querySelectorAll('[data-x]')
+        let minindex = 0
+        for(let i = 0; i<specialTags.length; i++){
+            console.log('specialTags[i].offsetTop')
+            if(Math.abs(specialTags[i].offsetTop - window.scrollY) < Math.abs(specialTags[minindex].offsetTop - window.scrollY)){
+                minindex = i
+            }
+        }
+
+
+
+        specialTags[minindex].classList.remove('offset')
+
+
+    //minindex就是离窗口最近的元素
+    // specialTags[minindex].classList.add('active')
+    // specialTags[minindex].classList.add（'animate')
+    let id = specialTags[minindex].id
+    console.log(id)
+    let a = document.querySelector('a[href="#'+ id +'"]')
+    let li = a.parentNode
+    let brothersAndME = li.parentNode.children
+    for( let i = 0; i<brothersAndME.length; i++){
+        brothersAndME[i].classList.remove('highlight')
+    }
+    li.classList.add('highlight')
+    console.log(li)
+
+}
+
 let liTags = document.querySelectorAll('nav.menu > ul >li')
 
         for(let i=0; i<liTags.length; i++){
@@ -239,6 +284,13 @@ let liTags = document.querySelectorAll('nav.menu > ul >li')
         }
 
         let aTags = document.querySelectorAll('nav.menu > ul > li > a')
+        function animate(time) {
+            requestAnimationFrame(animate);
+            TWEEN.update(time);
+        }
+        requestAnimationFrame(animate);
+
+
         for(let i=0; i< aTags.length; i++){
             aTags[i].onclick = function (x) {
                 x.preventDefault()
@@ -246,7 +298,19 @@ let liTags = document.querySelectorAll('nav.menu > ul >li')
                 let href = a.getAttribute('href')// #about
                 let element = document.querySelector(href)
                 let top = element.offsetTop
-                window.scrollTo(0,top-100)
+
+
+                let currentTop = window.scrollY
+                let targetTop = top-100
+                let s = targetTop - currentTop
+                var coords = { y: currentTop};
+                var tween = new TWEEN.Tween(coords)
+                    .to({ y: targetTop }, 800)
+                    .easing(TWEEN.Easing.Quadratic.InOut)
+                    .onUpdate(function() {
+                        window.scrollTo(0,coords.y)
+                    })
+                    .start();
             }
         }
     </script>

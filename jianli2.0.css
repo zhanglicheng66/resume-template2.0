@@ -67,6 +67,34 @@ a{
   background: red;
   height: 3px;
   animation: menuSlide .5s;
+}.topNavBar ul>li.highlight>a::after{
+  content:'';
+  display: block;
+  position: absolute;
+  top: 100%;
+  left:0;
+  width: 100%;
+  background: red;
+  height: 3px;
+  animation: menuSlide .5s;
+}
+[data-x].active{
+  outline: 10px solid #E6686A;
+}
+[data-x].offset{
+  transform: translateY( 300px);
+}
+[data-x]{
+  transform: translateY( 0px);
+  transition: all 0.5s;
+}
+@keyframes slideUp {
+  0%{
+    transform: translateY(-30px);
+  }
+  100%{
+    transform: translateY(0);
+  }
 }
 @keyframes submenuSlide{
   0%{
@@ -319,12 +347,22 @@ body > main .xiazaijianli:hover{
   background-color: lightpink;
   border-radius: 3px;
   margin:4px 0 40px;
+  overflow: hidden;
 }
 .jineng .jindu{
   background: red;
   width: 70%;
   height: 3px;
   border-radius: 3px;
+}
+.jineng.offset .jindu{
+  transform: translateX(-100%);
+
+}
+.jineng .jindu{
+  transform: translateX(0);
+  transition: all 5s;
+
 }
 .h3{
   font-size: 14px;
